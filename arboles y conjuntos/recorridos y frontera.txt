@@ -1,0 +1,74 @@
+PREORDEN
+
+procedure preorden(a: tArbolB; VAR l: tListaDin);
+VAR hi, hd: tArbolB;
+r: tElemento;
+begin
+IF NOT EsArbolBinVAcio THEN
+BEGIN
+Raiz(a, r);
+HijoIzq(a, hi);
+HijoDer(a, hd);
+
+InsertarFinal(r, l);
+preorden(hi,l);
+preorden(hd,l);
+
+END
+END;
+(--------------------------------------------)
+
+INORDEN
+
+procedure Inorden(a: tArbolB; VAR l: tListaDin);
+VAR hi, hd: tArbolB;
+r: tElemento;
+begin
+IF NOT EsArbolBinVAcio THEN
+BEGIN
+Raiz(a, r);
+HijoIzq(a, hi);
+HijoDer(a, hd);
+Inorden(hi,l);
+insertarfinal(r, l);
+Inorden(hd,l);
+END
+END;
+
+(--------------------------------------------)
+POSTORDEN
+
+procedure postorden(a: tArbolB; VAR l: tListaDin);
+VAR hi, hd: tArbolB;
+r: tElemento;
+begin
+IF NOT EsArbolBinVAcio THEN
+BEGIN
+Raiz(a, r);
+HijoIzq(a, hi);
+HijoDer(a, hd);
+postorden(hi,l);
+postorden(hd,l);
+InsertarFinal(r, l);
+END
+END;
+(--------------------------------------------)
+
+procedure Frontera (a: tArbolBin; VAR l:TlistaDin);
+VAR
+hi, hd: tArbolBin;
+BEGIN
+IF EsArbolBinVacio(a) THEN
+construirlistaVacia(l)
+ELSE BEGIN
+HijoIzq(a, hi);
+HijoDer(a, hd);
+IF EsArbolBinVacio(hi) AND EsArbolBinVacio(hd) THEN
+insertarfinal(l,a^.raiz)
+ELSE
+Frontera(hi,l);
+frontera(hd,l);
+END
+END;
+
+(--------------------------------------------)

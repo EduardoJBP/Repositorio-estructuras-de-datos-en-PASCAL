@@ -1,0 +1,260 @@
+INTERFACE
+	USES ELEMTAD;
+TYPE
+	TipoArbolBin = ^TipoNodo;
+	TipoNodo = RECORD
+		r: TipoElemento;
+		izq, der: TipoArbolBin;
+		END;
+(--------------------------------------------)
+PROCEDURE CrearArbolVacio(VAR a: TipoArbolBin);
+	BEGIN
+
+		a:=NIL
+
+	END;
+(--------------------------------------------)
+PROCEDURE ConstruirArbolBin(VAR a: TipoArbolBin; izq: TipoArbolBin; r:TipoElemento; der:TipoArbolBin);
+BEGIN
+
+  New(a);
+  Asignar(a^.r,r);
+  a^.izq:=izq;
+  a^.der:=der
+
+END;
+(--------------------------------------------)
+
+FUNCTION EsArbolBinVacio(a:TipoArbolBin):Boolean;
+
+BEGIN
+EsArbolBinVacio:= (a = NIL)
+END;
+(--------------------------------------------)
+
+PROCEDURE Raiz(a: TipoArbolBin; VAR e: TipoElemento);
+BEGIN
+ IF NOT EsArbolBinVacio(a) THEN 
+ Asignar(e,a^.r)
+END;
+
+(--------------------------------------------)
+PROCEDURE HijoIzq(a: TipoArbolBin; VAR hIzq: TipoArbolBin);
+ BEGIN
+  IF NOT EsArbolBinVacio(a) THEN
+  hIzq := a^.izq
+ END;
+(--------------------------------------------)
+
+PROCEDURE HijoDer(a: TipoArbolBin; VAR hDer: TipoArbolBin);
+BEGIN
+IF NOT EsArbolBinVacio(a) THEN
+hDer := a^.der
+END;
+(--------------------------------------------)
+
+
+
+FUNCTION NumeroNodos(a: TArbolBin): integer;
+VAR
+izq, der: TArbolBin;
+BEGIN
+IF EsArbolBinVacio(a) THEN
+	NumeroNodos := 0
+ELSE 
+BEGIN
+ HijoIzq(a, izq);
+ HijoDer(a, der);
+ NumeroNodos := 1 + NumeroNodos(izq) + NumeroNodos(der);
+END;
+END;
+(--------------------------------------------)
+
+FUNCTION ArbolesIguales(a1, a2: TArbolBin): boolean;
+
+VAR
+izq1, der1, izq2, der2: TArbolBin;
+r1, r2: TElemento;
+BEGIN
+IF EsArbolBinVacio(a1) THEN
+ ArbolesIguales := EsArbolBinVacio(a2)
+ELSE IF EsArbolBinVacio(a2) THEN
+ ArbolesIguales := false
+ELSE BEGIN
+ raiz(a1, r1);
+ raiz(a2, r2);
+ IF NOT Igual(r1, r2) THEN
+	ArbolesIguales := false
+ ELSE BEGIN
+	HijoIzq(a1, izq1);
+	HijoDer(a1, der1);
+	HijoIzq(a2, izq2);
+	HijoDer(a2, der2);
+	ArbolesIguales := ArbolesIguales(izq1, izq2) AND ArbolesIguales(der1, der2);
+ END;
+END;
+END;
+(--------------------------------------------)
+
+FUNCTION Pertenece(e: tElemento; a: TArbolBin): boolean;
+VAR r: tElemento;
+	hi, hd: TArbolBin;
+BEGIN
+IF EsArbolBinVacio(a) THEN
+ Pertenece := FALSE
+ELSE BEGIN
+ Raiz(a, r);
+ IF Iguales(e, r) THEN
+ Pertenece := TRUE
+ELSE
+BEGIN 
+ HijoIzq(a, hi);
+ HidoDer(a, hd);
+ Pertenece := Pertenece(e, hi) OR Pertenece(e, hd)
+END
+END
+END;
+(--------------------------------------------)
+FUNCTION NumHojas (a: tArbolBin): integer;
+VAR
+hi, hd: tArbolBin;
+BEGIN
+IF EsArbolBinVacio(a) THEN
+NumHojas := 0
+ELSE BEGIN
+ HijoIzq(a, hi);
+ HijoDer(a, hd);
+ IF EsArbolBinVacio(hi) AND EsArbolBinVacio(hd) THEN
+ NumHojas := 1
+ ELSE
+ NumHojas := NumHojas(hi) + NumHojas (hd)
+END
+END;
+
+(--------------------------------------------)
+PROCEDURE ConstruirSimetrico(a: tArbolBin; VAR asim: tArbolBin);
+VAR hi, hi, his, hds: tArbolBin;
+    r: tElemento;
+BEGIN
+IF NOT EsArbolBinVacio(a) THEN
+BEGIN
+	Raiz(a, r);
+	HijoIzq(a, hi);
+	HijoDer(a, hd);
+	ConstruirSimetrico(hi, his);
+	ConstruirSimetrico(hd, hds);
+	ConstruirArbol(asim, hds, r, his)
+END;
+ELSE
+ CrearArbolBinVacio(asim);
+END;
+(--------------------------------------------)
+
+
+FUNCTION Maximo (a, b: integer): integer;
+BEGIN
+ IF a>b THEN
+ Maximo := a
+ ELSE
+ Maximo := b
+END;
+
+(--------------------------------------------)
+FUNCTION Profundidad (a: tArbolBin): integer;
+VAR hi, hd: tArbolBin;
+BEGIN
+ IF EsArbolBinVacio(a) THEN
+	Profundidad := 0
+
+ ELSE BEGIN
+
+ HijoIzq(a, hi);
+	HijoDer(a, hd);
+	Profundidad := 1 + Maximo(Profundidad(hi), Profundidad(hd))
+END
+END;
+
+(--------------------------------------------)
+FUNCTION NivelElemento(a: tArbolBin; e: tElemento): integer;
+VAR 
+hi, hd: tArbolBin;
+r: tElemento;
+BEGIN
+IF EsArbolBinVacio(a) THEN
+NivelElemento := 0
+ELSE BEGIN
+ Raiz(a, r);
+ IF Igual(e, r) THEN
+ NivelElemento := 1
+ ELSE BEGIN
+  HijoIzq(a, hi);
+  HijoDer(a, hd);
+  IF Pertenece (e, hi) THEN
+    BEGIN
+    IF Pertenece(e, hd) THEN
+    NivelElemento := 1 + Minimo(NivelElemento(hi, e), NivelElemento(hd, e)
+   end;
+  ELSE
+    NivelElemento := 1 + NivelElemento(hi, e)
+  END
+ELSE
+ BEGIN
+  IF Pertenece(e, hd) THEN
+   NivelElemento := 1 + NivelElemento(hd, e)
+  ELSE
+   NivelElemento := 0
+ END
+END
+END
+END;
+(--------------------------------------------)
+FUNCTION Compensado (a: tArbolBin): boolean;
+VAR hi, hd: tArbolBin;
+BEGIN
+IF NOT EsArbolBinVacio(a) THEN
+BEGIN
+HijoIzq(a, hi);
+HijoDer(a, hd);
+Compensado := NumeroNodos(hi) = NumeroNodos(hd)
+END
+END;
+
+(--------------------------------------------)
+
+
+function longitudCamino(a:Tarbol; nodo1,nodo2:Tnodo):integer;
+var
+max,min:integer
+begin
+max:=maximo(nivelelemento(a,nodo1),nivelelemento(a,nodo2));
+min:=minimo(nivelelemento(a,nodo1),nivelelemento(a,nodo2));
+longitudcamino:=max-min;
+end;
+(--------------------------------------------)
+function gradoN(a:Tarbol;nodo:tnodo):integer;
+begin
+if esarbolvacio(a)then
+	gradoN:=0;
+else
+if iguales(nodo.raiz,a^.raiz)then
+if (esarbolvacio(a^.hizq) and not esarbolvacio(a^.der)) or (not esarbolvacio(a^.hizq) and  esarbolvacio(a^.der)) then
+	gradoN:=1;
+else if esarbolvacio(a^.hizq) and esarbolvacio(a^.hizq) then
+	grado:=0;
+else grado:=2
+else
+  if pertenece(nodo.elem,a^.izq)then
+   gradoN(a^.izq,n)
+  else if pertenece(nodo.elem,a^.der) then
+   gradoN(a^.der,n)
+end;
+(--------------------------------------------)
+function GradoA(a):integer;
+begin
+if esarbolvacio(a)then
+	gradoA:=0;
+else 
+GradoA:=max(gradoN(a^.izq,nodo),gradoN(a^.der,nodo));
+end;
+
+la operacion gradoN, nos da el grado del nodo

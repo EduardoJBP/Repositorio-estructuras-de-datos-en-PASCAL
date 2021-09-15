@@ -1,0 +1,223 @@
+IMPLEMENTATION
+(*---------------------------------------------------------------------*)
+PROCEDURE CrearVacia(VAR lista:TipoLista); O1
+
+	BEGIN
+
+		lista:=NIL;
+
+	END;
+
+
+(*----------------------------------------------------------*)
+PROCEDURE InsertarPrincipio(elem:TipoElemento; VAR lista:TipoLista); 01
+	VAR
+		aux:TipoNodo;
+	BEGIN
+
+		NEW(aux);
+		aux^.ant:=NIL;
+		aux^.dato:=elem;
+
+		IF EsVacia(lista) THEN
+        	aux^.sig:=NIL
+		ELSE
+			BEGIN
+
+				aux^.sig:=lista;
+				lista^.ant:= aux;
+
+			END;
+
+		lista:=aux;
+
+	END;
+
+
+(*----------------------------------------------------------*)
+
+
+FUNCTION Primero(lista:TipoLista): TipoElemento;     O1
+
+	BEGIN
+		IF NOT EsVacia(lista) THEN
+			Primero:=lista^.dato
+		ELSE
+			WRITELN('Error en PROCEDURE Primero: La lista es vacía');
+		END;
+
+(*----------------------------------------------------------*)
+
+FUNCTION Resto(lista:TipoLista): TipoLista;      O1
+	BEGIN
+		IF NOT EsVacia(lista) THEN
+			resto:=lista^.sig
+		ELSE
+			WRITELN('Error en PROCEDURE Primero: La lista es vacía');
+		END;
+
+(*-----------------------------------------*)
+
+FUNCTION EsVacia(lista:TipoLista):Boolean;  O1
+	BEGIN
+		EsVacia:=(lista=NIL);
+	END;
+
+(*------------------------------------------*)
+
+FUNCTION Longitud(lista:TipoLista):Integer;    ON
+	BEGIN
+		IF EsVacia(lista) THEN
+			Longitud:=0
+		ELSE
+			Longitud:=1+Longitud(lista^.sig);
+		END;
+
+(*--------------------------------------------*)
+
+FUNCTION Ultimo(lista:TipoLista):TipoElemento;   ON
+	var
+	aux: TistaDE;
+
+	BEGIN
+		IF NOT EsVacia(lista) THEN
+			BEGIN
+				aux:=lista;
+
+				WHILE NOT EsVacia(aux^.sig) DO
+					aux:=aux^.sig;
+
+				END
+			ultimo:=aux^.dato
+			ELSE
+
+				WRITELN('Error en PROCEDURE Ultimo: la lista es vacía');
+	END;
+
+(*--------------------------------------------------------------*)
+
+FUNCTION Pertenece(elem:TipoElemento; lista:TipoLista):Boolean;     ON
+	var
+		aux:TistaDE
+		enc:booleaa;
+
+	BEGIN
+		IF EsVacia(lista) THEN
+			Pertenece:=FALSE
+		ELSE
+			enc:=false;
+			aux:=lista;
+
+			while (not enc) and (aux<>nil) do
+				begin
+					if aux^.dato=elem then
+						enc:=true;
+					else
+					aux:=aux^.sig;
+				end;
+			Pertenece:=enc;
+		END;
+{NOTA: TipoElemento dispone de la operación comparación "=" por ser integer}
+HAY UN PERTENECE RECURSIVO EN EL PDF
+(*---------------------------------------------------------------*)
+
+PROCEDURE Concatenar(VAR lista1:TipoLista; VAR lista2:TipoLista);   ON
+	VAR
+		aux:TipoLista;
+	BEGIN
+		IF NOT EsVacia(lista2) THEN
+			IF EsVacia(lista1) THEN
+				lista1:=lista2
+			ELSE
+				BEGIN
+					aux:=lista1;
+					WHILE NOT EsVacia(aux^.sig) DO
+						aux:=aux^.sig;
+					aux^.sig:=lista2;
+					lista2^.ant:=aux;
+				END;
+			lista2:=NIL;
+	END;
+
+(*---------------------------------------------------------------*)
+
+PROCEDURE BorrarElemento(elem:TipoElemento; VAR lista:TipoLista);     ON
+	VAR
+		aux,ant,sig: TipoLista;
+		encontrado: Boolean;
+	BEGIN
+		encontrado:=FALSE;
+		IF NOT EsVacia(lista) THEN
+			BEGIN
+				aux:=lista;
+		{Recorro la lista hasta que encuentre elemento o hasta el final:}
+				WHILE NOT EsVacia(aux) AND NOT encontrado DO
+					BEGIN
+						IF aux^.dato=elem THEN {operación del TAD elemento }
+
+							BEGIN
+								IF (aux=lista) THEN { Si es el primer elemento }
+									BEGIN
+										IF EsVacia(lista^.sig) THEN { Si solo tiene un elemento }
+											BEGIN
+												DISPOSE(lista);
+												lista:=NIL;
+											END
+										ELSE { Si tiene varios elementos }
+											BEGIN
+												lista:=lista^.sig;
+												DISPOSE(lista^.ant);
+												lista^.ant:=NIL;
+											END;
+									END
+								ELSE { Si no es el primer elemento}
+									BEGIN
+										IF EsVacia(aux^.sig) THEN { Si es el ultimo elemento }
+											BEGIN
+												ant:=aux^.ant;
+												ant^.sig:=NIL;
+												DISPOSE(aux);
+											END
+										ELSE { Si es un elemento del medio de la lista }
+											BEGIN
+												ant:=aux^.ant; { Apunto al elemento anterior conant}
+												sig:=aux^.sig; { Apunto al elemento siguiente consig}
+												ant^.sig:=sig; { Puenteo hacia delante }
+												sig^.ant:=ant; { Puenteo hacia atras }
+												DISPOSE(aux); { Elimino el elemento }
+											END;
+									END;
+								encontrado:=TRUE;
+						END { Si no es el elemento se mira el siguiente }
+					ELSE
+						aux:=aux^.sig;
+				END;
+		END;
+
+END;
+
+(*--------------------------------------------------------------*)
+
+PROCEDURE InsertarFinal(elem:TipoElemento; VAR lista:TipoLista);     ON
+	VAR
+		aux,recorre:TipoLista;
+	BEGIN
+		NEW(aux);
+		aux^.sig:=NIL;
+		aux^.dato:=elem;
+		IF EsVacia(lista) THEN
+			BEGIN
+				aux^.ant:=NIL;
+				lista:=aux;
+			END
+		ELSE
+			BEGIN
+				recorre:=lista;
+				WHILE NOT EsVacia(recorre^.sig) DO { Recorro la lista hasta el ultimo elem}
+					recorre:=recorre^.sig;
+
+				recorre^.sig:=aux; { Conecto el último elemento con el nuevo elemento }
+				aux^.ant:=recorre; { Conecto el nuevo elemento con el ultimo}
+			END;
+	END;
+END.

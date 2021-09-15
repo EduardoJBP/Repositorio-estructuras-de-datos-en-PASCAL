@@ -1,0 +1,115 @@
+UNIT Cjto1;
+
+INTERFACE
+  USES ELEMENTO;
+  TYPE
+     TipoConjunto = SET OF TipoElemento;
+
+
+IMPLEMENTATION
+(--------------------------------------------)
+PROCEDURE CrearConjuntoVacio(VAR conjunto:TipoConjunto);
+BEGIN
+conjunto:=[];
+END;
+(--------------------------------------------)
+PROCEDURE Poner (VAR conjunto:TipoConjunto; elemento: TipoElemento);
+BEGIN
+if not pertenece(e,c) then
+conjunto:=conjunto+[elemento];
+END;
+(--------------------------------------------)
+
+PROCEDURE Elegir(c:TipoConjunto; VAR elemento:TipoElemento);
+VAR
+i: TElem;
+ BEGIN
+  i:=ini;
+  if not ConjuntoVacio(c) then
+  begin
+    while not Pertenece(i,c)do
+	i:=succ(i);
+    asignar(e,i)
+  end;
+END;
+(--------------------------------------------)
+
+FUNCTION Cardinal(c:Tconjunto) integer; Devuelve numero de elementos
+var
+i:Telement;
+acum:integer;
+begin
+if esConjuntoVacio(c)then
+Cardinal:=0;
+ else
+ begin
+ acum:=0;
+ for i:=ini to fin do
+ begin
+ if pertenece(i,c)then
+ acum:=aum+1;
+ end;
+cardinal:=acum;
+end;
+(--------------------------------------------)
+
+FUNCTION  EsSubConjunto(conjunto, conjunto2:TipoConjunto): BOOLEAN;
+VAR
+i:TElem;
+valor:Boolean;
+BEGIN
+if EsConjuntoVacio(c2)then
+ EsSubconjunto:=true;
+ else
+  begin
+   valor:=true
+   i:=ini;
+   while valor and i<FIN do
+    begin
+	if pertenece(i,c2) and not Pertenece (i,c1)then
+	valor:=false;
+	i:=succ(i);
+    end;
+if valor then
+if Pertenece(Fin,c2)then
+valor:=Pertenece(Fin,c1);
+EsSubConjunto:=valor;
+END;
+(--------------------------------------------)
+
+FUNCTION EsConjuntoVacio(conjunto:TipoConjunto): BOOLEAN;
+BEGIN
+EsConjuntoVacio:= conjunto=[]
+END;
+(--------------------------------------------)
+FUNCTION Pertenece(conjunto:TipoConjunto; elemento: TipoElemento): BOOLEAN;
+BEGIN
+Pertenece:= elemento IN conjunto
+END;
+(--------------------------------------------)
+
+PROCEDURE Quitar (VAR conjunto:TipoConjunto; elemento: TipoElemento);
+BEGIN
+conjunto:=conjunto - [elemento]
+END;
+
+(--------------------------------------------)
+PROCEDURE Union (conjunto, conjunto2: TipoConjunto;VAR conj_final: TipoConjunto);
+BEGIN
+onj_final:=conjunto + conjunto2
+END;
+(--------------------------------------------)
+
+PROCEDURE Interseccion (conjunto, conjunto2: TipoConjunto;VAR conj_final: TipoConjunto);
+BEGIN
+conj_final:=conjunto * conjunto2
+END;
+(--------------------------------------------)
+
+PROCEDURE Diferencia (conjunto, conjunto2: TipoConjunto;VAR conj_final: TipoConjunto);
+BEGIN
+conj_final:=conjunto - conjunto2
+END;
+
+END.
+

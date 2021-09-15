@@ -1,0 +1,349 @@
+implementation
+
+
+(*--------------------------------------------------------------*)
+procedure CrearVacia (VAR lista: TipoLista);   O1
+begin
+	lista:=NIL;
+end;
+
+
+(*--------------------------------------------------------------*)
+
+procedure InsertarPrincipio(elemento: TipoElemento; VAR lista: TipoLista); O1
+var
+	aux:TipoNodo;
+begin
+	 VER SI ESTÁ VACIA
+	new(aux); {Aquí creo la cajita que utilizo en papel para guiarme}
+	aux^.dato:=elemento;
+	aux^.siguiente := lista;
+	lista:=aux;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+procedure MostrarLista(lista:TipoLista);
+var
+	aux:TipoLista;
+begin
+	aux:=lista;
+	while (aux^.siguiente<>NIL) do
+	begin
+		write(aux^.dato, ' ');
+		aux:=aux^.siguiente;
+	end;
+end;
+
+
+(*--------------------------------------------------------------*)
+
+function Primero(lista:TipoLista):TipoElemento; O1
+begin
+	if (EsVacia(lista)) then
+	begin
+		writeln('Lista vacía');
+	end
+	else
+	begin
+		Primero:= lista^.dato;
+	end;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+
+function Resto(lista:TipoLista):TipoLista; O1
+begin
+	 if (EsVacia(lista)) then
+	begin
+		writeln('Lista vacía');
+	end
+	else
+	begin
+		Resto:=lista^.siguiente;
+	end;
+end;
+
+
+(*--------------------------------------------------------------*)
+
+function EsVacia(lista:TipoLista):boolean; 01
+begin
+	EsVacia:= (lista=NIL);
+end;
+
+
+
+
+(*--------------------------------------------------------------*)
+
+
+function Longitud(lista:TipoLista):integer; ON
+var
+	aux:TipoLista;
+	cont:integer;
+begin
+	aux:=lista;
+	cont:=0;
+	while (aux<>NIL) do
+	begin
+		cont:=cont+1;
+		aux:=aux^.siguiente;
+	end;
+	Longitud:=cont;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+
+function LongitudRecursivo(lista:TipoLista):integer;ON
+begin
+	if (EsVacia(lista)) then
+	begin
+		LongitudRecursivo:=0;
+	end
+	else
+	begin
+		LongitudRecursivo:= 1 + LongitudRecursivo(lista^.siguiente);
+	end;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+
+function Ultimo(lista:TipoLista): TipoElemento; ON
+var
+	aux:TipoLista;
+	e:TipoElemento;
+begin
+	if (esVacia(lista)) then
+	begin
+		writeln('Lista vacía');
+	end
+	else
+	begin
+		aux:=lista;
+		while (aux^.siguiente<> NIL) do
+		begin
+			aux:=aux^.siguiente;
+		end;
+		e:=aux^.dato;
+	end;
+	Ultimo:=e;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+
+function Pertenece(elemento:TipoElemento; lista:TipoLista):boolean;
+var                                                                   O(LONGITUD LISTA)
+	enc:boolean;
+	aux:TipoLista;
+begin
+	enc:=false;
+	aux:=lista;
+	while (not enc) and (aux<>NIL) do
+	begin
+		if (elemento=aux^.dato) then
+		begin
+			enc:=true;
+		end
+		else
+		begin
+			aux:=aux^.siguiente;
+		end;
+	end;
+	Pertenece:=enc;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+
+procedure InsertarFinal(elemento: TipoElemento; VAR lista: TipoLista);  ON
+var
+	aux:TipoNodo;
+	aux2:TipoLista;
+
+begin
+	new(aux);
+	aux^.dato:=elemento;
+	aux^.siguiente:=NIL;
+	if (lista=NIL) then {Es vacía}
+	begin
+		InsertarPrincipio(elemento, lista);
+	end
+	else if (lista^.siguiente=NIL) then {tiene un elemento}
+	begin
+		lista^.siguiente:=aux;
+	end
+	else if (lista^.siguiente<>NIL) then
+	begin
+		aux2:= lista;
+		while (aux2^.siguiente<>NIL) do
+		begin
+			aux2:=aux2^.siguiente;
+		end;
+		aux2^.siguiente:=aux;
+	end;
+end;
+
+
+(*--------------------------------------------------------------*)
+
+
+procedure Copiar(lista:TipoLista; VAR lista2: TipoLista);        O(LONGITUD LISTA)
+var
+	aux, aux2:TipoLista;
+begin
+	if (esVacia(lista)) then
+	begin
+		dispose(lista2);
+		{No sé si debería poner lista2:=NIL;}
+	end
+	else if ((esVacia(lista2)) and (not esVacia(lista))) then
+	begin
+		new(lista2);
+		{No sé si con señalar lista2 a donde está lista vale}
+		aux:=lista;
+		while (aux<>NIL) do
+		begin
+			InsertarFinal(aux^.dato, lista2);
+			aux:=aux^.siguiente;
+		end;
+	end
+	else if ((not esVacia(lista2)) and (not esVacia(lista))) then
+	begin
+		aux:=lista;
+		aux2:=lista2;
+		while (aux<>NIL) do
+		begin
+			if (aux2<>NIL) then
+			begin
+				lista2^.dato:=aux^.dato;
+			end
+			else
+			begin
+				InsertarFinal(aux^.dato, lista2);
+			end;
+			aux:=aux^.siguiente;
+			if (aux2<>NIL) then
+			begin
+				aux2:=aux2^.siguiente;
+			end;
+		end;
+	end;
+end;
+
+
+(*--------------------------------------------------------------*)
+
+
+procedure BorrarPrincipio (VAR lista: TipoLista);
+var
+	aux:TipoLista;
+begin
+	if (EsVacia(lista)) then
+	begin
+		writeln('Lista vacía');
+	end
+	else if (Longitud(lista) = 1) then
+	begin
+		dispose(lista);
+	end
+	else
+	begin
+		aux:=lista;
+		lista:=lista^.siguiente;
+		dispose(aux);
+	end;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+
+procedure BorrarFinal(VAR lista: TipoLista);
+var
+	act, ant:TipoLista;
+begin
+	if (esVacia(lista)) then
+	begin
+		writeln('Lista vacía');
+	end
+	else if (Longitud(lista)=1) then
+	begin
+		BorrarPrincipio(lista);
+	end
+	else
+	begin
+		ant:=lista;
+		act:=ant^.siguiente;
+		while (act^.siguiente <> NIL) do
+		begin
+			ant:=act;
+			act:= act^.siguiente;
+		end;
+		ant^.siguiente:=act^.siguiente;
+		dispose(act);
+
+	end;
+end;
+
+
+
+(*--------------------------------------------------------------*)
+
+procedure BorrarPosicion(elemento:TipoElemento; VAR lista: TipoLista);
+var
+	ant, act:TipoLista;
+begin
+	if (esVacia(lista)) then
+	begin
+		writeln('Lista vacía');
+	end
+	else if (Longitud(lista)=1) then
+	begin
+		BorrarFinal(lista);
+	end
+	else
+	begin
+		ant:=lista;
+		act:=lista^.siguiente;
+		while (elemento<>0) do
+		begin
+			ant:=ant^.siguiente;
+			act:=act^.siguiente;
+			elemento:=elemento-1;
+		end;
+		ant^.siguiente:=act^.siguiente;
+		dispose(act);
+	end;
+end;
+
+
+(*--------------------------------------------------------------*)
+
+fUNCTION iGUALES(l1, l2):boolean
+var 
+iguales
+aux1 y aux2
+
+begin
+
+aux:=l1
+aux2:=l2
+iguales:=true
+
+while (aux2<>nil and aux2<>2) and iguales(aux1^.elem,aux2^.elem)
+		AUX1:=AUX^.SIG
+		AUX2:=AUX2^.SIG
+	END;
+IGUAL:=(aux2<>nil and aux2<>nil)
+end.

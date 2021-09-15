@@ -1,0 +1,165 @@
+UNIT Cjto3;
+
+INTERFACE
+  USES ELEMENTO;
+  CONST
+     ini=
+     fin=
+  TYPE
+  	 TRango1=INI..FIN
+     TipoConjunto = RECORD
+                      vector: ARRAY[TRango1] OF TipoElemento;
+                      indice: TRango2(pred(ini)..FIN);
+                    END;
+IMPLEMENTATION
+
+(--------------------------------------------)
+PROCEDURE CrearConjuntoVacio(VAR conjunto:TipoConjunto);
+BEGIN
+conjunto.indice:=pred(ini);
+END;
+(--------------------------------------------)
+
+PROCEDURE Poner (VAR conjunto:TipoConjunto; elemento: TipoElemento);
+BEGIN
+   if not Pertenece(e,c)then
+    begin
+       indice:=succ(indice);
+      Asignar(c.almacen[indice],e)
+   end;
+END;
+
+(--------------------------------------------)
+
+PROCEDURE Elegir(c:TipoConjunto; VAR elemento:TipoElemento);
+BEGIN
+  if not esConjuntoVacio(c)then
+  asignar(e,c.almacen[c.indice])
+END;
+
+(--------------------------------------------)
+FUNCTION esSubConjunto(c, c2:TipoConjunto): BOOLEAN;
+VAR
+i:TRango1;
+Valor:Boolean;
+ BEGIN
+   if esConjuntoVacio(c2)then
+   esSubConjunto:=true;
+    else
+        begin
+        valor:=true
+        i:=ini;
+       WHILE (i < c2.indice) AND valor DO
+	BEGIN
+         IF NOT Pertenece(c2.almacen[i],c) THEN
+	 valor:= FALSE
+	 i:=succ(i)
+        END;
+       if valor then
+	esSubConjunto:=pertenece(c2.almacen[indice],c1)
+	else
+	esSubConjunto:=valor;
+       end;
+END;
+
+(--------------------------------------------)
+
+FUNCTION EsConjuntoVacio(conjunto:TipoConjunto): BOOLEAN;
+BEGIN
+EsConjuntoVacio:= conjunto.indice=pred(ini)
+END;
+
+(--------------------------------------------)
+FUNCTION Pertenece(c:TipoConjunto; e: TipoElemento): BOOLEAN;
+VAR
+i:TRango;
+BEGIN
+if esConjuntoVacio(c)then
+pertenece:=false
+ else
+ begin
+ i:=ini;
+ WHILE (i< c.indice) AND NOT igual(e,c.almacen[i]) DO
+  i:=succ(i);
+ Pertenece:= Iguales(c.almacen[i],e)
+end;
+END;
+(--------------------------------------------)
+
+
+
+FUNCTION Cardinal(c:Tconjunto) integer;
+begin
+Cardinal:=ord(c.indice)-ord(ini)+1
+end;
+
+(--------------------------------------------)
+PROCEDURE Quitar (VAR c:TipoConjunto; e: TipoElemento);
+VAR
+i,j:trango2;
+BEGIN
+if Pertenece(e,c) then
+begin
+i:=ini;
+WHILE  NOT iguales(c,e) DO
+i:=succ(i);
+for j:=i to c.indice do
+asignar(c.almacen[j],c.almacen[j+1])
+END;
+(--------------------------------------------)
+
+
+procedure copiarConjunto(c1:Tconjunto; VAR c2:TConjunto);
+var
+i:TRango;
+begin
+crearConjuntoVacio(c2);
+if not EsconjuntoVacio(c1)then
+for i:=ini to c1.indice do
+poner(c1.almacen[i],c2)
+end;
+(--------------------------------------------)
+
+PROCEDURE Union (c1, c2: TipoConjunto;VAR c3: TipoConjunto);
+VAR
+i:Trango;
+BEGIN
+CrearConjuntoVacio(c3);
+if not esconjuntoVacio(c2)then
+for i:=ini to c2.indice do
+poner(c2.almacen[i],c3);
+if not esconjuntoVacio(c)then
+for i:= ini to c1.indice do
+poner(c1.almacen[i],c3);
+end;
+END;
+(--------------------------------------------)
+
+PROCEDURE Diferencia (c1, c2: TipoConjunto;VAR c3: TipoConjunto);
+VAR
+i:TRango;
+BEGIN
+crearconjuntovacio(c3);
+if not esconjuntovacio(c1)then
+for i:=ini to c1.indice  do
+if not pertenece(c2,c1.almacen[i]);
+poner(c1.almacen[i],c3);
+END;
+
+(--------------------------------------------)
+PROCEDURE Interseccion (c1, c2: TipoConjunto;VAR c3: TipoConjunto);
+VAR
+ i:TRango;
+BEGIN
+if esconjuntoVacio(c1) or esConjuntoVacio(c2)then
+CrearConjuntoVacio(c3);
+else
+ begin
+ CrearConjuntoVacio(c3);
+ i:=ini;
+ FOR i:= INI TO c1.inidice DO
+ IF Pertenece(c1.almacen[i], c2) THEN
+ Poner(c3, c1.almacen[i]);
+end;
+END;
+(--------------------------------------------)

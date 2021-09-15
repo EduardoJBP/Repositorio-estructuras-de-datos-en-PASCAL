@@ -1,0 +1,149 @@
+
+UNIT ConjuntoNodos;
+
+INTERFACE
+	USES Nodo;
+
+TYPE
+
+	TConjuntoNodos= TipoLista;
+
+END;
+
+IMPLEMENTATION
+(--------------------------------------------)
+
+PROCEDURE CrearConjuntoVacio(VAR c:TConjuntoNodos);
+BEGIN
+	creallistavacia(c);
+END;
+(--------------------------------------------)
+
+PROCEDURE Poner(VAR c:TConjunto;e:Telem);
+BEGIN
+	IF NOT Pertenece (e, c) THEN
+	BEGIN
+		construir(e,c)
+	END;
+END;
+(--------------------------------------------)
+
+PROCEDURE Elegir (c:TConjuntoNodos); VAR e: telem);
+BEGIN
+
+	if not esconjuntovacio(c)
+		primero(c,e);
+END;
+
+(--------------------------------------------)
+FUNCTION EsConjuntoVacio(c:TConjuntoNodos):Boolean;
+
+BEGIN
+ EsConjuntoVacio:= (eslistaVacia(c));
+END;
+
+(--------------------------------------------)
+FUNCTION Pertenece(c:TConjuntoNodos;e:Telem):Boolean;
+
+BEGIN
+	pertenece:=tlista.pertenece(c,e)
+END;
+
+(--------------------------------------------)
+function cardinal(c:TConjunto):integer;
+
+begin
+
+	cardinal:=longitud(c);
+
+end;
+(--------------------------------------------)
+
+FUNCTION esSubConjunto(c, c2:TipoConjunto): BOOLEAN;
+VAR
+aux:Tlista;
+BEGIN
+if esconjuntoVacio(c2)then
+ essubconjunto:=true;
+else
+ begin
+  aux:=c2;
+  while not eslistavacia(aux) and pertenece(primero(aux),c) do
+   begin
+    resto(aux,aux);
+   end;
+ esSunconjunto:= not eslistavacia(aux);
+end;
+END;
+
+
+(--------------------------------------------)
+PROCEDURE Quitar(VAR c:TConjuntoNodos;e:TElemento);
+
+BEGIN
+
+tlista.borrarelemento(c,e)
+
+END;
+(--------------------------------------------)
+PROCEDURE Union (c1, c2: TipoConjunto;VAR c3: TipoConjunto);
+VAR
+aux:Tlista;
+BEGIN
+ CrearConjuntoVacio(c3);
+ aux:=c2;
+ while not eslistavacia(aux) do
+  begin
+   poner(aux^.elem,c3);
+   resto(aux,aux);
+  end;
+aux:=c1;
+while not eslistavacia(aux) do
+ begin
+ poner(aux^.elem,c3);
+ resto(aux,aux);
+end;
+END;
+(--------------------------------------------)
+
+PROCEDURE Diferencia (c1, c2: TipoConjunto;VAR c3: TipoConjunto);
+   
+VAR
+aux:Tlista;
+
+ BEGIN
+   CrearConjuntoVacio(c3);
+   aux:=c1;
+   while not eslistavacia(aux) do
+   begin
+	if not pertenece(aux^.elem,c2)
+	poner(aux^.elem,c3);
+	resto(aux,aux);
+end;
+END;
+(--------------------------------------------)
+PROCEDURE Interseccion (c1, c2: TipoConjunto;VAR c3: TipoConjunto);
+VAR
+aux:Tlista;
+BEGIN
+if esconjuntoVacio(c2) or esConjuntoVacio(c1)then
+crearconjuntovacio(c3);
+else
+ begin
+   aux:=c1;
+while not eslistavacia(aux) do
+ begin
+  if pertenece(aux^.elem,c2) then
+  poner(aux^.elem,c3);
+ resto(aux,aux);
+end;
+end;
+END;
+
+
+
+
+(--------------------------------------------)
+
+
+

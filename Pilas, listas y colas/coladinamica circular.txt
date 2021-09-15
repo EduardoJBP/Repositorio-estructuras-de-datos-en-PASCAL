@@ -1,0 +1,39 @@
+begin
+
+TYPE
+
+	tCola=^Tnodo;
+	tnodo=record
+		sig:tenlace;
+		elem:Telemento;
+	end;
+
+Procedure encolar(e:Telem;VAR c;Tcola)
+	var
+		aux:Tcola;
+
+	begin
+		new (aux);
+		asignar(elemm,aux^.info)
+		if es colaVacia(c) then
+
+			begino
+
+				aux^.sig:=aux;
+				c:=aux;
+			end
+		else
+			begin
+				aux^.sig:=c^.sig;
+				c^.sig:=aux;
+				c:=aux;
+			end;
+
+	end;
+
+
+
+
+
+
+end.

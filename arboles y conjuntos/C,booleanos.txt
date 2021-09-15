@@ -1,0 +1,135 @@
+UNIT Cjto2;
+
+INTERFACE
+  USES ELEMENTO;
+  TYPE
+   TipoConjunto = ARRAY[TipoElemento] OF Boolean;
+
+IMPLEMENTATION
+
+PROCEDURE CrearConjuntoVacio(VAR conjunto:TipoConjunto);
+VAR
+  i:TipoElemento;
+BEGIN
+  FOR i:=PrimerElemento TO UltimoElemento DO
+   conjunto[i]:=FALSE;
+END;
+
+(--------------------------------------------)
+
+PROCEDURE Poner (VAR conjunto:TipoConjunto; elemento: TipoElemento);
+BEGIN
+conjunto[elemento]:=TRUE
+END;
+
+(--------------------------------------------)
+
+PROCEDURE Elegir(conjunto:TipoConjunto; VAR elemento:TipoElemento);
+VAR
+i: telemento;
+BEGIN
+if not esconjunovacio(conjunto) then
+begin
+i:=uelemento.primero;
+while not pertenece(conjunto,i) then
+i:=succ(i);
+asignar(conjunto[i],elemento);
+end;
+END;
+(--------------------------------------------)
+FUNCTION Esubconjunto(conjunto, conjunto2:TipoConjunto): BOOLEAN;
+VAR
+   i:TipoElemento;
+   valor:Boolean;
+BEGIN
+if esConjuntoVacio(c2)then
+ Essubconjunto := true;
+else
+  begin
+    i:=uelemento.primero;
+    valor:=true
+    while valor and i<uelemento.ultimo
+  begin
+    if c2[i] and c[i]=false then
+    valor:=false;
+    i:=succ[i]
+  end;
+  if valor then
+   if c2[i] then
+    valor:=c[i];
+Essubconjunto:=valor;
+end;
+END;
+
+
+(--------------------------------------------)
+FUNCTION EsConjuntoVacio(conjunto:TipoConjunto): BOOLEAN;
+VAR
+vacio: Boolean;
+i:TipoElemento;
+BEGIN
+ vacio:=TRUE;
+ i:=PrimerElemento;
+ WHILE i<uelemento.final AND vacio DO
+   begin
+       IF conjunto[i] THEN
+        begin
+	   vacio:= FALSE
+	end
+       ELSE
+	i:=Succ(i);
+    end;
+if vacio then
+   begin
+	if c[i] then
+	vacio:=false
+end;
+ EsConjuntoVacio:=vacio
+     END;
+
+(--------------------------------------------)
+FUNCTION Pertenece(conjunto:TipoConjunto; elemento: TipoElemento): BOOLEAN;
+BEGIN
+Pertenece:= conjunto[elemento]
+END;
+
+
+(--------------------------------------------)
+
+PROCEDURE Quitar (VAR conjunto:TipoConjunto; elemento: TipoElemento);
+BEGIN
+conjunto[elemento]:=FALSE
+END;
+(--------------------------------------------)
+
+
+PROCEDURE Union (conjunto, conjunto2: TipoConjunto;VAR conj_final: TipoConjunto);
+VAR
+ i:TipoElemento;
+BEGIN
+CrearConjuntoVacio(conj_final);
+FOR i:=PrimerElemento TO UltimoElemento DO
+  conj_final[i]:=conjunto[i] OR conjunto2[i]
+END;
+(--------------------------------------------)
+
+PROCEDURE Interseccion (conjunto, conjunto2: TipoConjunto;VAR conj_final: TipoConjunto);
+VAR
+i:TipoElemento;
+BEGIN
+CrearConjuntoVacio(conj_final);
+FOR i:=PrimerElemento TO UltimoElemento DO
+conj_final[i]:=conjunto[i] AND conjunto2[i]
+END;
+
+
+(--------------------------------------------)
+PROCEDURE Diferencia (conjunto, conjunto2: TipoConjunto;VAR conj_final: TipoConjunto);
+VAR
+i:TipoElemento;
+BEGIN
+CrearConjuntoVacio(conj_final);
+FOR i:=PrimerElemento TO UltimoElemento DO
+conj_final[i]:=conjunto[i] AND NOT conjunto2[i]
+END;
+END.

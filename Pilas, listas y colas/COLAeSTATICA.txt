@@ -1,0 +1,153 @@
+interface
+	USES TElemento;
+	CONST
+ 		MAX_ELEM = 5;
+	TYPE
+ 		TipoPosicion = 0..MAX_ELEM-1;
+		TipoCola = RECORD
+ 			vector: ARRAY [0..MAX_ELEM-1] OF TipoElemento;
+			principio, final: 0..MAX_ELEM-1;
+			longitud: 0..MAX_ELEM (* número de elementos de la cola *)
+		END;
+
+
+
+IMPLEMENTATION
+(*-------------------------------------------*)
+
+PROCEDURE IncrementarCircular(VAR posicion: TipoPosicion);
+
+(*O(1)*)
+
+	BEGIN
+		IF posicion = MAX_ELEM - 1 THEN
+			posicion := 0
+		ELSE
+			posicion := posicion + 1;
+(* NOTA: otra forma de hacerlo sería mediante la siguiente instrucción :
+posicion = (posicion + 1) MOD MAX_ELEM *)
+	END;
+
+(*-------------------------------------------*)
+
+PROCEDURE CrearColaVacia (VAR cola: TipoCola);
+(* COMPLEJIDAD: O(1) *)
+	BEGIN
+		 cola.principio := 0;
+		 cola.final := 0;
+		 cola.longitud := 0
+	END;
+
+(*-------------------------------------------*)
+
+FUNCTION EsColaVacia (cola: TipoCola): BOOLEAN;
+(* COMPLEJIDAD: O(1) *)
+BEGIN
+ EsColaVacia := (cola.longitud = 0)
+END;
+
+(*------------------------------------------------------------*)
+
+PROCEDURE Insertar (elemento: TipoElemento; VAR cola: TipoCola);
+(*PRECONDICIÓN: Cola no llena. Es una precondición que surge de esta implementación,
+por
+la restricción en el tamaño de los vectores estáticos. No se refleja en la
+especificación pues
+la especificación es independiente de la implementación. *)
+(* COMPLEJIDAD: O(1) *)
+	VAR
+ 		ColaNoLlena : BOOLEAN;
+	BEGIN
+ 		ColaNoLlena := cola.longitud < MAX_ELEM; (* cola no llena *)
+ 		IF ColaNoLlena THEN
+ 			BEGIN
+ 				IF EsColaVacia(cola) THEN
+ 					cola.vector[cola.final] := elemento
+ 				ELSE
+ 					BEGIN
+ 						IncrementarCircular(cola.final); (* avanzar final en una posición circularmente *)
+ 						cola.vector[cola.final] := elemento
+ 					END;
+ 				cola.longitud := cola.longitud + 1;
+ 			END
+	   ELSE (* No se cumple la precondición. *)
+		  WRITELN('Error en Procedure Insertar: la cola estaba llena.');
+	END;
+
+(*-------------------------------------------------*)
+
+FUNCTION PrimeroCola (cola: TipoCola): TipoElemento;
+(*PRECONDICIÓN: cola no debe estar vacía. *)
+(* COMPLEJIDAD: O(1) *)
+	BEGIN
+		 IF NOT EsColaVacia(cola) THEN
+			 PrimeroCola := cola.vector[cola.principio]
+		 ELSE
+			 WRITELN('Error en Function PrimeroCola: la cola está vacía.');
+		 END;
+
+
+(*------------------------------------*)
+
+PROCEDURE Eliminar (VAR cola: TipoCola);
+(* PRECONDICIÓN: cola no debe estar vacía. *)
+(* COMPLEJIDAD: O(1) *)
+	BEGIN
+		 IF NOT EsColaVacia (cola) THEN
+			BEGIN
+				 IF cola.longitud > 1 THEN IncrementarCircular(cola.principio);
+					 cola.longitud := cola.longitud - 1
+			END
+		 ELSE
+		 WRITELN('Error en Procedure Eliminar: la cola está vacía.');
+	END;
+
+(*-------------------------------------------------------*)
+
+PROCEDURE CopiarCola (cola: TipoCola; VAR cola2: TipoCola);
+(* COMPLEJIDAD: O(N), donde N = Longitud *)
+	VAR
+	 indice : TipoPosicion;
+	BEGIN
+		 IF EsColaVacia (cola) THEN
+			 CrearColaVacia(cola2)
+		 ELSE
+			 BEGIN
+				 cola2.principio := cola.principio;
+				 cola2.final := cola.final;
+				 cola2.longitud := cola.longitud;
+				 indice := cola.principio;
+				 WHILE indice <> cola.final DO {* por ser circular puede ser mayor o menor *}
+					 BEGIN
+						 cola2.vector[indice] := cola.vector[indice];
+						 IncrementarCircular(indice);
+					 END;
+			 cola2.vector[cola.final] := cola.vector[cola.final]
+			 END
+	END;
+
+(*-------------------------------------------------*)
+
+FUNCTION IgualCola (cola, cola2: TipoCola): BOOLEAN;
+
+(* COMPLEJIDAD: O(min(cola.longitud, cola2.longitud)) *)
+	VAR
+ 		indice1, indice2 : TipoPosicion;
+		iguales : BOOLEAN;
+	BEGIN
+		 iguales := (cola.longitud = cola2.longitud);
+		 IF iguales AND NOT EsColaVacia (cola) THEN
+			 BEGIN
+				 indice1 := cola.principio;
+				 indice2 := cola2.principio;
+				 WHILE iguales AND (indice1 <> cola.final) DO
+					 BEGIN
+						 iguales := iguales AND (cola2.vector[indice2] = cola.vector[indice1]);
+						 IncrementarCircular(indice1);
+						 IncrementarCircular(indice2);
+					 END;
+				 iguales := iguales AND (cola2.vector[cola.final] = cola.vector[cola.final])
+			 END;
+		 IgualCola := iguales
+	END;
+end.

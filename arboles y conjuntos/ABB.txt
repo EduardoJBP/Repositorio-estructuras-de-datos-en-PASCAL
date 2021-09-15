@@ -1,0 +1,167 @@
+TYPE
+	TipoArbolBB = ^TNodo;
+	TNodo = RECORD
+		r: TElemento;
+		izq, der: TArbolBB;
+		END;
+(--------------------------------------------)
+procedure ConstruirArbolB(VAR a:TarbolBB; izq:TarbolBB; r:Telemento; deizq:TarbolBB);
+begin
+
+NEW(a);
+asignar(a^.raiz,r);
+a^.izq:=izq;
+a^.der:=der;
+
+end;
+(--------------------------------------------)
+
+procedure CrearArbolBinVacio(VAR a:TarbolBB);
+begin
+
+a:=nil;
+
+end;
+(--------------------------------------------)
+procedure Insertar(VAR a:TarbolBB; e:Telem);
+
+begin
+if arbolBinVacio(a)then
+	construirArbolBin(a,nil,e,nil);
+else if menor(a^.raiz,e)
+	insertar(e,a^.izq)
+else if Mayor(e,a^.raiz)
+	insertar(e,a^.der);
+end;
+(--------------------------------------------)
+
+procedure Eliminar(var a:TArbolBB; e:TElemento);
+VAR
+m:Telemento;
+aux:TarbolBB;
+
+begin
+if not arbolBinVacio(a) then
+begin
+ if uElemento.igual(a^.raiz,e) then
+	begin
+	 if ArbolVacio(a^.der) then
+	begin
+		aux:=a
+		a:=a^.izq;
+		dispose (aux);
+	end
+	else if ArboolVacio(a^.izq) then
+        begin
+	aux:=a
+	a:=a^.der;
+	dispose (aux);
+	end
+	else
+	 begin
+          Minimo(a^.der,m);
+	  asignar(a^.raiz,m);
+	  eliminar(a^.der,m);
+	  end;
+	 end
+	 else
+	 if menor(e,a^.raiz) then
+		 eliminar(a^.izq,e)
+	 else
+	 	eliminar(a^.der,e)
+	 end;
+ end;
+
+(--------------------------------------------)
+
+function EsArbolBinVacio(arbol:TarbolBB):Boolean;
+begin
+
+EsArbolBinVacio:=(arbol=nil);
+
+end;
+(--------------------------------------------)
+function Pertenece(a:TArbolBB; e:Telemento): Boolean;
+ begin
+
+  if esArbolBinVacio(a)then
+  pertenece:=false;
+  else
+   begin
+	 if uelemento.igual(e,a^.raiz) then
+	 pertenece:=true;
+
+	 else if menor(e,a^.raiz) then
+	 Pertenece:=pertenece(a^.izq,e)
+    else
+	 Pertenece:=pertenece(a^.der,e)
+
+
+  end;
+
+end;
+(--------------------------------------------)
+
+	ITERATIVO
+procedure Minimo(a:TarbolBB; VAR e:TElemento);
+
+begin
+if not esArbolBinVacio(a) then
+begin
+while not esArbolBinVacio(a^.izq)then
+a:=a^.izq;
+asignar(e,a^.raiz);
+end;
+end;
+(--------------------------------------------)
+
+		RECURSIVO
+procedure Maximo(a:TArbolBB;Var e:Telemento);
+begin
+if not esArbolBinVacio(a) then
+begin
+if esArbolBinVavio(a^.der)then
+asignar(e,a^.raiz);
+else
+maximo(a^.der,e);
+end;
+end;
+
+(--------------------------------------------)
+
+function longitudCamino(a:Tarbol; nodo1,nodo2:Tnodo):integer;
+var
+max,min:integer
+begin
+max:=maximo(nivelelemento(a,nodo1),nivelelemento(a,nodo2));
+min:=minimo(nivelelemento(a,nodo1),nivelelemento(a,nodo2));
+longitudcamino:=max-min;
+end;
+(--------------------------------------------)
+function gradoN(a:Tarbol;nodo:tnodo):integer;
+begin
+if esarbolvacio(a)then
+	gradoN:=0;
+else
+if iguales(nodo.raiz,a^.raiz)then
+if (esarbolvacio(a^.hizq) and not esarbolvacio(a^.der)) or (not esarbolvacio(a^.hizq) and  esarbolvacio(a^.der)) then
+	gradoN:=1;
+else if esarbolvacio(a^.hizq) and esarbolvacio(a^.hizq) then
+	grado:=0;
+else grado:=2;
+else
+  if pertenece(nodo.elem,a^.izq)then
+   gradoN(a^.izq,n)
+  else if pertenece(nodo.elem,a^.der) then
+   gradoN(a^.der,n)
+end;
+(--------------------------------------------)
+function GradoA(a):integer;
+begin
+if esarbolvacio(a)then
+	gradoA:=0;
+else 
+GradoA:=max(gradoN(a^.izq,nodo),gradoN(a^.der,nodo));
+end;
+
+la operacion gradoN, nos da el grado del nodo

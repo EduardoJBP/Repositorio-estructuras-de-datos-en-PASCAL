@@ -1,0 +1,168 @@
+INTERFACE
+	USES ELEMTAD;
+TYPE
+	Talmacen = record;
+		izq,der:tarbol
+		elem:telem
+	end;
+	eacrbol=record
+		cabvacia,cabllena:integer;
+		nodos:array[ini..fin]of talmacen
+(--------------------------------------------)
+implementacion
+procedure creararbolVacio(var a:Tarbol;pos:integer);
+	begin
+		a.cabocupada:=0;
+
+	end;
+(--------------------------------------------)
+function esarbolVacio(a:tarbol):boolean;
+	begin
+		esarbolvacio:= (a.cabocupada=0;) ;
+	end;
+
+(--------------------------------------------)
+
+procedure ConstruirArbolBin (VAR a:Tarbol; r:Telemento; izq,der:integer);
+begin
+aux:= a.nodo[a.cablibres].der
+a.nodo[a.cablibre].izq:=izq;
+a.nodo[a.cablibre].iderzq:=der;
+asignar(a.nodo[a.cablibre].elem,r);
+a.cablibre:=aux;
+end;
+
+(--------------------------------------------)
+
+procedure Insertar( e:Telem;VAR a:TarbolBB;pos:integer);
+var
+izq,der:integer;
+aux:integer;
+begin
+if (a.almacen[pos].izq=0) and (a.almacen[pos].der=0) and not a.cabvacias<>0 then
+construirArbolBin(a,0,e,0);
+else if menor(a.nodo[pos].elem,e) then begin
+izq:=a.nodo[pos].izq;
+insertar(e,a,izq) end;
+else if mayor(a.nodo[pos].elem,e) then begin
+der:=a.nodo[pos].der;
+insertar(e,a,der); end;
+end;
+(--------------------------------------------)
+
+procedure Eliminar(var a:TArbolBB;pos:integer; e:TElemento);
+		VAR
+			m:Telemento;
+			aux:integer;
+			raiz:telemento;
+			encontrado:boolean;
+		begin
+			if pertenece(a,pos,e) then
+				encontrado:=false;
+				while not encontrado then
+					begin
+						if menor(e,a.almacen[pos].elem) then
+							begin
+								aux:=pos;
+								pos:=a.almacen[pos].izq;
+							end;
+						else if mayor(e,a.almacen[pos].elem)
+							begin
+								aux:=pos;
+								pos:=a.almacen[pos].der;
+							end;
+						else if igual(e,a.almacen[pos].elem)
+							encontrado:=true;
+					end;
+
+				if (a.almacen[pos].izq=0) then
+					begin
+
+						if a.almacen[aux].der=pos then
+							a.almacen[aux].der:=a.almacen[pos].der;
+							a.almacen[pos].der:=a.cablibre;
+							a.cablibre:=pos;
+						else
+							a.almacen[aux].izq:=a.almacen[pos].der;
+							a.almacen[pos].der:=a.cablibre;
+							a.cablibre:=pos;
+					end;
+				else if (a.almacen[pos].der=0) then
+					begin
+
+						if a.almacen[aux].der=pos then
+							a.almacen[aux].der:=a.almacen[pos].izq;
+							a.almacen[pos].der:=a.cablibre;
+							a.cablibre:=pos;
+						else
+							a.almacen[aux].izq:=a.almacen[pos].izq;
+							a.almacen[pos].der:=a.cablibre;
+							a.cablibre:=pos;
+					end;
+				else
+					begin
+
+						minimo(a,a.almacen[pos].der,m);
+						asignar(a.almacen[pos].raiz,m);
+						eliminar(a,a.almacen[pos].der,m);
+
+					end;
+
+
+
+		end;
+
+
+(--------------------------------------------)
+function Pertenece(a:TArbolBB;pos:integer; e:Telemento): Boolean;
+var
+izq,der:integer;
+raiz:telemento;
+begin
+
+ if esArbolBinVacio(a,pos)then
+  pertenece:=false;
+  else
+   begin
+    asignar(a.nodo[pos].elem,raiz);
+    if uelemento.igual(e,a^.raiz) then
+    pertenece:=true;
+    else if menor(e,raiz) then begin
+	izq:=a.nodo[pos].izq;
+	Pertenece:=pertenece(a,izq,e) end
+   else begin
+    der:=a.nodo[pos].der;
+    Pertenece:=pertenece(a,der,e) end;
+ end;
+end;
+
+(--------------------------------------------)
+	ITERATIVO
+procedure Minimo(a:TarbolBB;pos:integer; VAR e:TElemento);
+var
+ aux:integer;
+begin
+if not esArbolBinVacio(a) then
+ begin
+  aux:=pos;
+  while not a.almacen[aux].izq=0 do
+  aux:=a.nodo[aux].izq;
+  asignar(e,a.nodo[aux].elem);
+end;
+
+end;
+(--------------------------------------------)
+	iterativo
+procedure Maximo(a:TArbolBB;pos:integer; VAR e:Telemento);
+var
+aux:integer;
+begin
+if not esArbolBinVacio(a) then
+begin
+aux:=pos;
+while not a.almacen[aux].der=0 do
+ aux:=a.nodo[aux].der;
+asignar(e,a.nodo[aux].elem);
+end;
+end;
+

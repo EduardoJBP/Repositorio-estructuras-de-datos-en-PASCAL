@@ -1,0 +1,133 @@
+TYPE
+	TipoPila = ^TipoNodo;
+	TipoNodo = RECORD
+		dato : TipoElemento;
+		siguiente : TipoPila
+	END;
+
+PROCEDURE CrearPilaVacia (VAR pila: TipoPila); O1
+
+PROCEDURE Apilar (elemento: TipoElemento; VAR pila: TipoPila); O1
+
+FUNCTION EsPilaVacia (pila: TipoPila): BOOLEAN; O1
+
+FUNCTION Cima (pila: TipoPila): TipoElemento; O1
+
+
+PROCEDURE Desapilar (VAR pila: TipoPila); O1
+
+FUNCTION IgualPila (pila, pila2: TipoPila): BOOLEAN; O(MIN LONGITUD PILA, LONGITUSD PILA 2)
+
+{PROCEDURE CopiarPila (pila: TipoPila; VAR pila2: TipoPila);O(LONGITUD PILA)
+
+
+
+implementation
+
+
+PROCEDURE CrearPilaVacia (VAR pila: TipoPila);
+begin
+	pila:=nil;
+end;
+
+PROCEDURE Apilar(elemento: TipoElemento; VAR pila: TipoPila);
+var
+	aux:TipoPila;
+begin
+	if (pila = nil) then
+	begin
+		new(pila);
+		pila^.dato:=elemento;
+		pila^.siguiente:=nil;
+	end
+	else
+	begin
+		new(aux);
+		aux.dato:=elemento;
+		aux.siguiente:=pila;
+		pila:=aux;
+	end;
+end;
+
+FUNCTION EsPilaVacia (pila: TipoPila): BOOLEAN;
+begin
+	EsPilaVacia:= (pila=nil);
+end;
+
+FUNCTION Cima (pila: TipoPila): TipoElemento;
+begin
+	if (EsPilaVacia(pila)) then
+	begin
+		writeln('Pila vacia');
+	end
+	else
+	begin
+		Cima:=pila^.dato;
+	end;
+end;
+
+PROCEDURE Desapilar (VAR pila: TipoPila);
+var
+	aux:TipoPila;
+begin
+	if (EspilaVacias(pila)) then
+	begin
+		writeln('Pila vacia');
+	end
+	else
+	begin
+		aux:=pila;
+		pila:=pila.siguiente;
+		dispose(aux);
+	end;
+end;
+
+FUNCTION IgualPila (pila, pila2: TipoPila): BOOLEAN;
+var
+	aux1, aux2:TipoPila;
+	iguales:boolean;
+begin
+	iguales:=true;
+	aux1:=pila;
+	aux2:=pila2;
+	while (iguales) and (aux1<>nil) and (aux2<>nil) do
+	begin
+		if (aux1.dato<>aux2.dato) then
+		begin
+			iguales:=false;
+		end
+		else
+		begin
+			aux1:=aux1.siguiente;
+			aux2:=aux2.siguiente;
+		end;
+	end;
+	if (aux1=nil) and (aux2=nil) then
+		IgualPila:=true;
+	else
+		IgualPila:=false;
+end;
+
+
+PROCEDURE Copiar(pila1: TipoPila; VAR pila2: TipoPila);
+VAR
+auxPNodo1, auxPNodo2, auxPNodoPre2: TipoPila;
+BEGIN
+IF NOT EsPilaVacia(pila1) THEN BEGIN
+	auxPNodo1 := pila1;
+	new(auxPNodo2);
+	Asignar(auxPNodo2^.info,auxPNodo1^.info);
+	auxPNodo2^.ant := NIL;
+	pila2 := auxPNodo2;
+	auxPNodo1 := auxPNodo1^.ant; {Avance en pila1}
+	WHILE (auxPNodo1 <> NIL) DO BEGIN
+		auxPNodoPre2 := auxPNodo2;
+		new(auxPNodo2);
+		Asignar(auxPNodo2^.info,auxPNodo1^.info);
+		auxPNodo2^.ant := NIL;
+		auxPNodoPre2^.ant := auxPNodo2;
+		auxPNodo1 := auxPNodo1^.ant
+	END {WHILE}
+END {IF}
+END;
+end.

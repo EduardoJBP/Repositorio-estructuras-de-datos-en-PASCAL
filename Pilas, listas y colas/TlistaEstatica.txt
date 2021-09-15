@@ -1,0 +1,69 @@
+unit uListaEstatica
+	interface
+	uses Telem;
+	const
+	ini=..
+	fin=..
+	type
+		Tindice=ini..fin;
+		Tvector[Tindice] of Teleme;
+		TlistaEst=record
+			almacen:Tvector;
+			num:integer;
+		end;
+	implementation
+
+	Procedure Construir(elem:Telem; VAR L:TListaEst);
+		Begin
+			if not EsListaLLena(l) then
+				begin
+					l.num:=l.num+1;
+					asignar(elem,l.almacen[l.num]);
+				end;
+		end;
+
+
+	Procedure Primero(L:Tlista; VAR elem:Telem);
+		begin
+			Asignar(L.almacen[l.num],elem);
+		end;
+
+
+	Procedure Resto(Var l:Tlista);
+		begin
+			L.num:=l.num-1;
+		end;
+
+	Function EsVacia (l:TlistaEst);
+		begin
+			esvacia:=(l.num=0);
+		end;
+
+	Function Longitud(l:Tlista);
+		begin
+			Longitud:=l.num;
+		end;
+
+	Procedure Ultimo(l:Tlista; VAR elem:Telem);
+		begin
+			Asignar(L.almacen[ini],elem);
+		end,
+
+	Function Pertenece(l:TlistaEst;elem:TElem):BOOlean;
+
+		begin
+			If EsVacia(l) then
+				Pertenece:=false
+			else
+				Begin
+					i:=ini;
+					while i<=l.num and not pertenece do
+						begin
+
+							Pertenece:= iguales(l.almacen[i],elem)
+							i:=succ(i);
+
+						end;
+
+				end;
+		end;

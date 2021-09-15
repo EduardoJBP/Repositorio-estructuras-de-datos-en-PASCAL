@@ -1,0 +1,69 @@
+unit uCola;
+INTERFACE
+	USES uElemento;
+	TYPE
+		tEnlace = ^tNodo;
+		tNodo = RECORD
+					elem: tElemento;
+					sig: tEnlace;
+				END;
+		tCola = RECORD
+					p, f: tEnlace
+				END;
+
+	(*constructoras generadoras*)
+	PROCEDURE CrearColaVacia(VAR cola: tCola);
+	PROCEDURE Insertar(elem: tElemento; VAR cola: tCola);
+
+	(*observadoras selectoras*)
+	PROCEDURE Primero(cola: tCola; VAR elem: tElemento);
+	PROCEDURE Eliminar(VAR cola: tCola);
+
+	(*observadoras no selectoras*)
+	FUNCTION EsVacia (cola: tCola): boolean;
+
+
+
+IMPLEMENTATION
+PROCEDURE CrearColaVacia(VAR cola: tCola);  O1
+	BEGIN
+		cola.p:= NIL;
+		cola.f:= NIL
+	END
+
+PROCEDURE Insertar(elem: tElemento; VAR cola: tCola); O1
+	VAR nuevo: tEnlace;
+	BEGIN
+		new(nuevo);
+		Asignar(muevo^.elem, elem);
+		nuevo^.sig := NIL;
+		IF EsColaVacia(cola) THEN
+			cola.p:= nuevo
+		ELSE
+			cola.f^.sig := nuevo;
+		cola.f:= nuevo
+	END;
+
+PROCEDURE Primero(cola: tCola; VAR elem: tElemento); O1
+	BEGIN
+		IF NOT EsColaVacia(cola) THEN
+			Asignar(elem, cola.p^.elem)
+	END;
+
+PROCEDURE Eliminar(VAR cola: tCola); 01
+	VAR aux: tEnlace;
+	BEGIN
+		IF NOT EsColaVacia(cola) THEN
+			BEGIN
+				aux:= cola.p;
+				cola.p := cola.p^.sig;
+				dispose (aux)
+			END
+	END;
+
+FUNCTION EsVacia (cola: tCola): boolean; O1
+	BEGIN
+		EsVacia := (cola.p = NIL) AND (cola.f = NIL)
+	END;
+
+END.
